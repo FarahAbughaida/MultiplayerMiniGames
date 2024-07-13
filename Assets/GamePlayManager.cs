@@ -1,18 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GamePlayManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static GamePlayManager ins;
+
+    [SerializeField]
+    GameObject WinnerText;
+
+    [SerializeField]
+    GameObject EndPanel;
+
+    [SerializeField]
+    public int scoreToWin = 3;
+
+    private void Awake()
     {
-        
+        if (ins == null)
+        {
+            ins = this;
+        }
+        EndPanel.SetActive(false);
+        WinnerText.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void EndGame(Transform winnerPosition)
     {
-        
+        EndPanel.SetActive(true);
+        WinnerText.transform.position = winnerPosition.position;
+        WinnerText.SetActive(true);
     }
 }

@@ -7,6 +7,9 @@ public class FishManager : MonoBehaviour
     [SerializeField]
     float waitTimeBeforeDestroy = 1f;
 
+    [SerializeField]
+    bool isTrap;
+
     void Start()
     {
         Destroy(this.gameObject, waitTimeBeforeDestroy);
@@ -17,7 +20,15 @@ public class FishManager : MonoBehaviour
         Debug.Log("Trigger");
         if (other.tag == "Player")
         {
-            other.gameObject.GetComponent<PlayerManager>().CollectedFish();
+            if (isTrap)
+            {
+                other.gameObject.GetComponent<PlayerManager>().CollectedTrapFish();
+            }
+            else
+            {
+                other.gameObject.GetComponent<PlayerManager>().CollectedFish();
+            }
+
             Destroy(this.gameObject);
         }
     }

@@ -16,6 +16,9 @@ public class PlayerManager : MonoBehaviour
     AvalibleKey avalibleKey;
 
     [SerializeField]
+    PlayerAnimations playerAnimations;
+
+    [SerializeField]
     Transform midPoint;
 
     [SerializeField]
@@ -24,6 +27,13 @@ public class PlayerManager : MonoBehaviour
     [SerializeField]
     float timeBeforeReturnInitPoint;
 
+    PlayerScore playerScore;
+
+    private void Start()
+    {
+        playerScore = GetComponent<PlayerScore>();
+    }
+
     private void Update()
     {
         switch (avalibleKey)
@@ -31,22 +41,22 @@ public class PlayerManager : MonoBehaviour
             case AvalibleKey.Space:
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    //StartCoroutine(MoveHand());
-                    //StartCoroutine(ReturnToInit());
-                    transform.position = midPoint.position;
-                    Invoke(nameof(ReturnToInit), timeBeforeReturnInitPoint);
+                    move();
                 }
                 break;
             case AvalibleKey.KeypadEnter:
                 if (Input.GetKeyDown(KeyCode.KeypadEnter))
                 {
-                    //StartCoroutine(MoveHand());
-                    //StartCoroutine(ReturnToInit());
-                    transform.position = midPoint.position;
-                    Invoke(nameof(ReturnToInit), timeBeforeReturnInitPoint);
+                    move();
                 }
                 break;
         }
+    }
+
+    void move()
+    {
+        transform.position = midPoint.position;
+        Invoke(nameof(ReturnToInit), timeBeforeReturnInitPoint);
     }
 
     void ReturnToInit()
@@ -57,6 +67,23 @@ public class PlayerManager : MonoBehaviour
     public void CollectedFish()
     {
         Debug.Log("Player Name :" + transform.name);
+        playerScore.AddScore();
+        if (playerScore.isWin())
+        {
+            playerWin();
+        }
+    }
+
+    public void CollectedTrapFish()
+    {
+        Debug.Log("Player Name T:" + transform.name);
+        playerScore.SubtractScore();
+    }
+
+    void playerWin()
+    {
+        GamePlayManager.ins.EndGame(transform);
+        playerAnimations.startHeadAnim();
     }
 
     /*    [SerializeField]
